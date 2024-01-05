@@ -19,6 +19,10 @@ on:
         required: false
         type: string
         default: '3.11'
+      key_extra:
+        required: false
+        type: string
+        default: ''
   workflow_call:
     inputs:
       build_target:
@@ -46,6 +50,11 @@ on:
         required: false
         type: string
         default: '3.11'
+
+      key_extra:
+        required: false
+        type: string
+        default: ''
 
 concurrency:
   # Skip intermediate builds: always.
@@ -96,7 +105,7 @@ jobs:
           # enough cache space for all the tests to run at once and still
           # fit under the 10 GB limit.
           max-size: 500M
-          key: ${{ matrix.os }}
+          key: ${{inputs.key_extra}}${{ matrix.os }}
           variant: sccache
       - name: Build and Test
         uses: llvm/actions/build-test-llvm-project@main
