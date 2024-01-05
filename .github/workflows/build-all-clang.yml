@@ -1,0 +1,33 @@
+name: Build Clang
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 * * * *"
+
+concurrency:
+  # Skip intermediate builds: always.
+  # Cancel intermediate builds: only if it is a pull request build.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+
+jobs:
+  check_clang:
+    name: Build and Test Clang Components
+    uses: ./.github/workflows/llvm-project-tests.yml
+    with:
+      key_extra: clang-
+    #   build_target: check-clang
+      #build_target:
+      build_target: check-all
+      #projects: bolt;clang;clang-tools-extra;compiler-rt;flang;libc;libclc;lld;llvm;mlir;polly;pstl
+      #projects: clang;lldb;libclc;lld
+      projects: clang;clang-tools-extra;lldb;lld
+      # projects: all
+      os_list: '["ubuntu-latest", "windows-latest"]'
