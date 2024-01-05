@@ -1,0 +1,108 @@
+name: Mirror the llvm/llvm-project repo
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+  #push:
+  #  branches:
+  #    - main
+  #  paths:
+  #    - .github/workflows/repo-sync.yml
+  schedule:
+    - cron: "*/15 * * * *"
+
+concurrency:
+  group: repo-sync
+
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+    steps:
+      # - name: Restore cached git checkout
+      #   id: cache-git-checkout-restore
+      #   uses: actions/cache/restore@v3
+      #   with:
+      #     path: ${{ github.workspace }}
+      #     key: git-checkout-${{runner.os}}-${{github.run_number}}
+      #     restore-keys: git-checkout-${{runner.os}}-
+
+      # - run: |
+      #     pwd
+      #     ls -al
+      #     echo $HOME
+      #     echo ~/
+      #     echo ${{ github.workspace }}
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          # The default commit history is 1. We set to 0, which means the full
+          # history. This is critical to be able to rebase.
+          fetch-depth: 0
+          show-progress: true
+          persist-credentials: false
+      - run: |
+          pwd
+          ls -al
+          echo $HOME
+          echo ~/
+
+      # - name: repo-sync
+      #   uses: repo-sync/github-sync@v2
+      #   with:
+      #     source_repo: "llvm/llvm-project"
+      #     source_branch: "main"
+      #     destination_branch: "main"
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Inspiration is from:
+      # https://github.com/repo-sync/github-sync/blob/master/github-sync.sh
+      - name: Reset original URL for pushing
+        #run: git remote set-url origin "https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git"
+        run: git remote set-url origin "https://${{github.actor}}:${{secrets.PAT}}@github.com/${{github.repository}}.git"
+      - name: Set upstream remote
+        run: git remote add upstream "https://github.com/llvm/llvm-project.git"
+      - name: Setup Git Config
+        run: |
+          git config user.name "${{secrets.GIT_NAME}}"
+          git config user.email "${{secrets.GIT_EMAIL}}"
+      - name: Show remotes and branches
+        run: |
+          git remote -vv
+          git branch -vv
+      # - name: Fetch main
+      #   run: git fetch --progress origin main
+      # - name: Pull from main
+      #   run: git pull --rebase --progress origin main
+        # run: git fetch --no-tags --prune --progress origin
+        # run: git -c protocol.version=2 fetch --no-tags --prune --progress --no-recurse-submodules --depth=1 origin
+      # - name: Checkout main
+        # run: git checkout main
+        # run: git checkout --progress --force -B main refs/remotes/origin/main
+      - name: Fetch main from upstream
+        # run: git fetch upstream main
+        run: git fetch --progress upstream main
+      # - name: Merge in upstream changes
+      #   run: git pull --no-edit origin main
+      - name: Set upstream branch (shouldn't hurt)
+        run: git branch --set-upstream-to=upstream/main
+
+      - name: Show remotes and branches
+        run: |
+          git remote -vv
+          git branch -vv
+
+      # - name: Pull in upstream changes through rebase
+      #   run: git pull --rebase --progress upstream main
+      - name: Rebase onto upstream
+        run: git rebase -v
+      - name: Push to main
+        run: git push --progress origin -f
+
+      # - name: Save cached git checkout
+      #   id: cache-git-checkout-save
+      #   uses: actions/cache/save@v3
+      #   with:
+      #     path: ${{ github.workspace }}
+      #     key: ${{ steps.cache-git-checkout-restore.outputs.cache-primary-key }}
