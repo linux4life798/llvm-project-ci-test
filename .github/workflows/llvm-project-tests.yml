@@ -19,6 +19,10 @@ on:
         required: false
         type: string
         default: '3.11'
+      key_extra:
+        required: false
+        type: string
+        default: ''
   workflow_call:
     inputs:
       build_target:
@@ -45,6 +49,11 @@ on:
         required: false
         type: string
         default: '3.11'
+
+      key_extra:
+        required: false
+        type: string
+        default: ''
 
 concurrency:
   # Skip intermediate builds: always.
@@ -101,7 +110,7 @@ jobs:
           # fit under the 10 GB limit.
           # Default to 2G to workaround: https://github.com/hendrikmuhs/ccache-action/issues/174
           max-size: 2G
-          key: ${{ matrix.os }}
+          key: ${{inputs.key_extra}}${{ matrix.os }}
           variant: sccache
       - name: Build and Test
         env:
