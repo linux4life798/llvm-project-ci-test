@@ -89,6 +89,7 @@ jobs:
           max-size: 500M
           key: ${{ matrix.os }}
           variant: sccache
+          verbose: 2
       - name: Build and Test
         uses: llvm/actions/build-test-llvm-project@main
         env:
