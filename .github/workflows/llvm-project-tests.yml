@@ -112,6 +112,7 @@ jobs:
           max-size: 2G
           key: ${{inputs.key_extra}}${{ matrix.os }}
           variant: sccache
+          verbose: 2
       - name: Build and Test
         env:
           # Workaround for https://github.com/actions/virtual-environments/issues/5900.
