@@ -106,7 +106,7 @@ jobs:
       uses: llvm/actions/install-ninja@22e9f909d35b50bd1181709564bfe816eaeaae81 # main
 
     - name: Setup sccache
-      uses: hendrikmuhs/ccache-action@ca3acd2731eef11f1572ccb126356c2f9298d35e # v1.2.9
+      uses: hendrikmuhs/ccache-action@faf867a11c028c0b483fb2ae72b6fc8f7d842714 # v1.2.12
       with:
         max-size: 250M
         key: sccache-${{ matrix.os }}-release
@@ -147,7 +147,7 @@ jobs:
         path: ${{ needs.prepare.outputs.build-dir }}/llvm-project
 
     - name: Setup sccache
-      uses: hendrikmuhs/ccache-action@ca3acd2731eef11f1572ccb126356c2f9298d35e # v1.2.9
+      uses: hendrikmuhs/ccache-action@faf867a11c028c0b483fb2ae72b6fc8f7d842714 # v1.2.12
       with:
         max-size: 250M
         key: sccache-${{ matrix.target.os }}-release
