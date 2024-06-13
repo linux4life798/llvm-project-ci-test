@@ -86,7 +86,7 @@ jobs:
       # lldb.  Using this setup-python action to make 3.10 the default
       # python fixes this.
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ inputs.python_version }}
       - name: Install Ninja
@@ -95,13 +95,13 @@ jobs:
       # actions/checkout deletes any existing files in the new git directory,
       # so this needs to either run before ccache-action or it has to use
       # clean: false.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.1.7
         with:
           fetch-depth: 250
 
       # See https://github.com/Mozilla-Actions/sccache-action for setup.
       - name: Run sccache-cache
-        uses: mozilla-actions/sccache-action@v0.0.3
+        uses: mozilla-actions/sccache-action@v0.0.4
       - name: Set C/C++ caching env vars
         run: |
           echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
