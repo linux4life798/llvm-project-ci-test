@@ -34,7 +34,7 @@ jobs:
       #     echo $HOME
       #     echo ~/
       #     echo ${{ github.workspace }}
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.1.7
         with:
           ref: main
           # The default commit history is 1. We set to 0, which means the full

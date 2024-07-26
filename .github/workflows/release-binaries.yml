@@ -58,7 +58,7 @@ jobs:
 
     steps:
     - name: Checkout LLVM
-      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
     - name: Install Dependencies
       shell: bash
@@ -150,7 +150,7 @@ jobs:
     steps:
 
     - name: Checkout Actions
-      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       with:
         ref: ${{ (github.event_name == 'pull_request' && github.sha) || 'main' }}
         sparse-checkout: |
@@ -163,7 +163,7 @@ jobs:
       uses: ./workflows/.github/workflows/release-binaries-setup-stage
 
     - name: Checkout LLVM
-      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       with:
         ref: ${{ needs.prepare.outputs.ref }}
 
@@ -207,7 +207,7 @@ jobs:
     runs-on: ${{ inputs.runs-on }}
     steps:
     - name: Checkout Actions
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.1.7
       with:
         ref: ${{ (github.event_name == 'pull_request' && github.sha) || 'main' }}
         sparse-checkout: |
@@ -241,7 +241,7 @@ jobs:
     runs-on: ${{ inputs.runs-on }}
     steps:
     - name: Checkout Actions
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.1.7
       with:
         ref: ${{ (github.event_name == 'pull_request' && github.sha) || 'main' }}
         sparse-checkout: |
@@ -290,7 +290,7 @@ jobs:
     runs-on: ${{ inputs.runs-on }}
     steps:
     - name: Checkout Actions
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.1.7
       with:
         ref: ${{ (github.event_name == 'pull_request' && github.sha) || 'main' }}
         sparse-checkout: |
@@ -340,7 +340,7 @@ jobs:
     runs-on: ${{ inputs.runs-on }}
     steps:
     - name: Checkout Actions
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.1.7
       with:
         ref: ${{ (github.event_name == 'pull_request' && github.sha) || 'main' }}
         sparse-checkout: |
@@ -364,7 +364,7 @@ jobs:
         # and other steps expect D:\files.
         mv ${{ steps.setup-stage.outputs.build-prefix  }}/build/tools/clang/stage2-bins/${{ needs.prepare.outputs.release-binary-filename }} .
 
-    - uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 #v4.3.0
+    - uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b #v4.3.4
       with:
         name: ${{ runner.os }}-${{ runner.arch }}-release-binary
         # Due to path differences on Windows when running in bash vs running on node,
@@ -401,14 +401,14 @@ jobs:
 
     steps:
     - name: 'Download artifact'
-      uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
+      uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
       with:
         pattern: '*-release-binary'
         merge-multiple: true
 
     - name: Attest Build Provenance
       id: provenance
-      uses: actions/attest-build-provenance@897ed5eab6ed058a474202017ada7f40bfa52940 # v1.0.0
+      uses: actions/attest-build-provenance@5e9cb68e95676991667494a6a4e59b8a2f13e1d0 # v1.3.3
       with:
         subject-path: ${{ needs.prepare.outputs.release-binary-filename }}
 
@@ -417,7 +417,7 @@ jobs:
         mv ${{ steps.provenance.outputs.bundle-path }} ${{ needs.prepare.outputs.release-binary-filename }}.jsonl
 
     - name: Upload Build Provenance
-      uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 #v4.3.3
+      uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b #v4.3.4
       with:
         name: ${{ runner.os }}-${{ runner.arch }}-release-binary-attestation
         path: ${{ needs.prepare.outputs.release-binary-filename }}.jsonl
@@ -442,7 +442,7 @@ jobs:
     runs-on: ${{ inputs.runs-on }}
     steps:
     - name: Checkout Actions
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.1.7
       with:
         ref: ${{ (github.event_name == 'pull_request' && github.sha) || 'main' }}
         sparse-checkout: |
