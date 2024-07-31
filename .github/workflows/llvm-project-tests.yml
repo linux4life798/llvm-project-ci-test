@@ -101,7 +101,7 @@ jobs:
 
       # See https://github.com/Mozilla-Actions/sccache-action for setup.
       - name: Run sccache-cache
-        uses: mozilla-actions/sccache-action@v0.0.3
+        uses: mozilla-actions/sccache-action@v0.0.5
       - name: Set C/C++ caching env vars
         run: |
           echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
